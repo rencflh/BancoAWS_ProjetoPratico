@@ -18,7 +18,7 @@ class EstudanteCRUD:
         usuario_existe = self.db['usuario'].find_one({"cpf": cpf_aluno})
         
         if not usuario_existe:
-            print(f"❌ ERRO: O CPF {cpf_aluno} não está cadastrado em Usuários. Inserção cancelada.")
+            print(f"ERRO: O CPF {cpf_aluno} não está cadastrado em Usuários. Inserção cancelada.")
             return None
 
         # Garante que a lista de vínculos nasça vazia se não for passada
@@ -27,10 +27,10 @@ class EstudanteCRUD:
 
         try:
             resultado = self.colecao.insert_one(dados_estudante)
-            print(f"✅ Estudante inserido com sucesso! Matrícula: {dados_estudante.get('matEstudante')}")
+            print(f"Estudante inserido com sucesso! Matrícula: {dados_estudante.get('matEstudante')}")
             return resultado.inserted_id
         except PyMongoError as e:
-            print(f"❌ Erro ao inserir estudante: {e}")
+            print(f"Erro ao inserir estudante: {e}")
             return None
 
     def criar_varios(self, lista_de_estudantes: list):
@@ -45,15 +45,15 @@ class EstudanteCRUD:
                     est["vinculos"] = []
                 estudantes_validos.append(est)
             else:
-                print(f"⚠️ Estudante matrícula {est.get('matEstudante')} ignorado: CPF {cpf_aluno} não cadastrado.")
+                print(f"Estudante matrícula {est.get('matEstudante')} ignorado: CPF {cpf_aluno} não cadastrado.")
                 
         if estudantes_validos:
             try:
                 resultado = self.colecao.insert_many(estudantes_validos)
-                print(f"✅ {len(resultado.inserted_ids)} estudantes inseridos em lote com sucesso!")
+                print(f"{len(resultado.inserted_ids)} estudantes inseridos em lote com sucesso!")
                 return resultado.inserted_ids
             except PyMongoError as e:
-                print(f"❌ Erro ao inserir lote: {e}")
+                print(f"Erro ao inserir lote: {e}")
         return []
 
     def ler_um(self, filtro: dict):
@@ -61,7 +61,7 @@ class EstudanteCRUD:
         try:
             return self.colecao.find_one(filtro)
         except PyMongoError as e:
-            print(f"❌ Erro ao buscar estudante: {e}")
+            print(f"Erro ao buscar estudante: {e}")
             return None
 
     def ler_varios(self, filtro: dict = {}):
@@ -69,7 +69,7 @@ class EstudanteCRUD:
         try:
             return list(self.colecao.find(filtro))
         except PyMongoError as e:
-            print(f"❌ Erro ao buscar estudantes: {e}")
+            print(f"Erro ao buscar estudantes: {e}")
             return []
 
     def atualizar(self, filtro: dict, novos_dados: dict):
@@ -77,7 +77,7 @@ class EstudanteCRUD:
         
         # 1. PROTEÇÃO DE CHAVE PRIMÁRIA (PK): Impede a alteração da matrícula via update
         if "matEstudante" in novos_dados:
-            print("⚠️ Aviso: A matrícula (Chave Primária) não pode ser alterada. Ignorando este campo.")
+            print("Aviso: A matrícula (Chave Primária) não pode ser alterada. Ignorando este campo.")
             del novos_dados["matEstudante"]
 
         # 2. PROTEÇÃO DE CHAVE ESTRANGEIRA (FK): Se tentar mudar o CPF, checa se o novo existe
@@ -85,18 +85,18 @@ class EstudanteCRUD:
             novo_cpf = novos_dados["cpf"]
             usuario_existe = self.db['usuario'].find_one({"cpf": novo_cpf})
             if not usuario_existe:
-                print(f"❌ ERRO: O novo CPF {novo_cpf} não existe em Usuários. Atualização cancelada.")
+                print(f"ERRO: O novo CPF {novo_cpf} não existe em Usuários. Atualização cancelada.")
                 return 0
 
         try:
             resultado = self.colecao.update_one(filtro, {"$set": novos_dados})
             if resultado.modified_count > 0:
-                print("🔄 Dados do estudante atualizados com sucesso!")
+                print("Dados do estudante atualizados com sucesso!")
             else:
-                print("⚠️ Nenhum dado foi modificado (os dados já eram iguais).")
+                print("Nenhum dado foi modificado (os dados já eram iguais).")
             return resultado.modified_count
         except PyMongoError as e:
-            print(f"❌ Erro ao atualizar estudante: {e}")
+            print(f"Erro ao atualizar estudante: {e}")
             return 0
 
     def deletar(self, filtro: dict):
@@ -104,12 +104,12 @@ class EstudanteCRUD:
         try:
             resultado = self.colecao.delete_one(filtro)
             if resultado.deleted_count > 0:
-                print("🗑️ Estudante deletado com sucesso!")
+                print("Estudante deletado com sucesso!")
             else:
-                print("⚠️ Nenhum estudante encontrado para deletar.")
+                print("Nenhum estudante encontrado para deletar.")
             return resultado.deleted_count
         except PyMongoError as e:
-            print(f"❌ Erro ao deletar estudante: {e}")
+            print(f"Erro ao deletar estudante: {e}")
             return 0
 
 
@@ -125,7 +125,7 @@ class EstudanteCRUD:
         curso_existe = self.db['curso'].find_one({"idCurso": id_do_curso})
         
         if not curso_existe:
-            print(f"❌ ERRO: O curso ID {id_do_curso} não existe. Vínculo cancelado.")
+            print(f"ERRO: O curso ID {id_do_curso} não existe. Vínculo cancelado.")
             return 0
 
         try:
@@ -135,10 +135,10 @@ class EstudanteCRUD:
                 {"$push": {"vinculos": novo_vinculo}}
             )
             if resultado.modified_count > 0:
-                print("➕ Vínculo acadêmico adicionado com sucesso!")
+                print("Vínculo acadêmico adicionado com sucesso!")
             return resultado.modified_count
         except PyMongoError as e:
-            print(f"❌ Erro ao adicionar vínculo: {e}")
+            print(f"Erro ao adicionar vínculo: {e}")
             return 0
 
     def atualizar_status_vinculo(self, mat_estudante: str, id_curso: int, novo_status: str):
@@ -154,10 +154,10 @@ class EstudanteCRUD:
         try:
             resultado = self.colecao.update_one(filtro, dados_atualizacao)
             if resultado.modified_count > 0:
-                print(f"🔄 Status do vínculo com curso {id_curso} atualizado para '{novo_status}'.")
+                print(f"Status do vínculo com curso {id_curso} atualizado para '{novo_status}'.")
             return resultado.modified_count
         except PyMongoError as e:
-            print(f"❌ Erro ao atualizar status do vínculo: {e}")
+            print(f"Erro ao atualizar status do vínculo: {e}")
             return 0
 
     def remover_vinculo(self, mat_estudante: str, id_curso: int):
@@ -170,8 +170,8 @@ class EstudanteCRUD:
         try:
             resultado = self.colecao.update_one(filtro, comando_remocao)
             if resultado.modified_count > 0:
-                print(f"🗑️ Vínculo com o curso {id_curso} removido com sucesso!")
+                print(f"Vínculo com o curso {id_curso} removido com sucesso!")
             return resultado.modified_count
         except PyMongoError as e:
-            print(f"❌ Erro ao remover vínculo: {e}")
+            print(f"Erro ao remover vínculo: {e}")
             return 0

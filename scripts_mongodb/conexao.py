@@ -12,10 +12,10 @@ def testar_conexao():
         # Envia um comando de "ping" para o servidor
         client.admin.command('ping')
         
-        print("✅ SUCESSO! Você está conectado ao MongoDB Atlas na AWS.")
+        print("SUCESSO! Você está conectado ao MongoDB Atlas na AWS.")
         return client
     except Exception as e:
-        print("❌ ERRO AO CONECTAR:")
+        print("ERRO AO CONECTAR:")
         print(e)
         return None
 

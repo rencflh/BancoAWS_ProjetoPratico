@@ -19,7 +19,7 @@ def conectar_banco():
         client.admin.command('ping')
         return db
     except Exception as e:
-        print(f"❌ Falha ao conectar ao banco de dados: {e}")
+        print(f"Falha ao conectar ao banco de dados: {e}")
         return None
 
 def aplicar_validacoes_esquema(db):
@@ -37,7 +37,7 @@ def aplicar_validacoes_esquema(db):
         "semestre": esquemas.esquema_semestre
     }
 
-    print("\n🛡️  Aplicando regras de integridade e validação no banco de dados...")
+    print("\nAplicando regras de integridade e validação no banco de dados...")
     for nome_colecao, esquema in colecoes_esquemas.items():
         try:
             db.command(
@@ -46,9 +46,9 @@ def aplicar_validacoes_esquema(db):
                 validator=esquema, 
                 validationLevel="strict"
             )
-            print(f"  ✅ Schema aplicado com sucesso na coleção: {nome_colecao}")
+            print(f"  Schema aplicado com sucesso na coleção: {nome_colecao}")
         except OperationFailure as e:
-            print(f"  ❌ Erro ao aplicar schema em '{nome_colecao}': {e.details.get('errmsg', e)}")
+            print(f"  Erro ao aplicar schema em '{nome_colecao}': {e.details.get('errmsg', e)}")
 
 
 # ========================================================
@@ -57,7 +57,7 @@ def aplicar_validacoes_esquema(db):
 def menu_estudantes(manager: EstudanteCRUD):
     while True:
         print("\n" + "="*35)
-        print("🎓 GERENCIAR ESTUDANTES E VÍNCULOS")
+        print("GERENCIAR ESTUDANTES E VÍNCULOS")
         print("="*35)
         print("1. Criar novo Estudante")
         print("2. Criar vários Estudantes (Lote)")
@@ -99,13 +99,13 @@ def menu_estudantes(manager: EstudanteCRUD):
             aluno = manager.ler_um({"matEstudante": mat})
             if aluno:
                 print("\n" + "="*40)
-                print(f"✅ DOSSIÊ DO ALUNO: {aluno.get('matEstudante')}")
+                print(f"DOSSIÊ DO ALUNO: {aluno.get('matEstudante')}")
                 print("="*40)
                 print(f"CPF: {str(aluno.get('cpf')).zfill(11)} | MC: {aluno.get('mc')}")
                 print(f"Ano de Ingresso: {aluno.get('anoIngresso')}")
                 
                 # Percorre e mostra os detalhes de cada vínculo encontrado
-                print("\n📚 VÍNCULOS ACADÊMICOS:")
+                print("\nVÍNCULOS ACADÊMICOS:")
                 vinculos = aluno.get('vinculos', [])
                 if not vinculos:
                     print("  - Nenhum vínculo registrado.")
@@ -113,7 +113,7 @@ def menu_estudantes(manager: EstudanteCRUD):
                     print(f"  -> Curso ID: {v.get('curso')} | Status: {v.get('status')}")
                 
                 # Aproveita para mostrar também o histórico de notas embutido
-                print("\n📝 HISTÓRICO DE NOTAS (CURSA):")
+                print("\nHISTÓRICO DE NOTAS (CURSA):")
                 historico = aluno.get('historico_escolar', [])
                 if not historico:
                     print("  - Nenhuma nota registrada.")
@@ -122,7 +122,7 @@ def menu_estudantes(manager: EstudanteCRUD):
                     print(f"  -> Turma ID: {h.get('id_turma')} | Nota: {nota_formatada}")
                 print("="*40)
             else:
-                print("⚠️ Aluno não encontrado.")
+                print("Aluno não encontrado.")
 
         elif opcao == '4':
             mat = input("Matrícula do estudante que deseja alterar: ")
@@ -137,7 +137,7 @@ def menu_estudantes(manager: EstudanteCRUD):
             if dados_novos:
                 manager.atualizar({"matEstudante": mat}, dados_novos)
             else:
-                print("⚠️ Nenhuma alteração informada.")
+                print("Nenhuma alteração informada.")
 
         elif opcao == '5':
             mat = input("Matrícula do Estudante para deletar: ")
@@ -163,7 +163,7 @@ def menu_estudantes(manager: EstudanteCRUD):
         elif opcao == '0':
             break
         else:
-            print("❌ Opção inválida.")
+            print("Opção inválida.")
 
 
 # ========================================================
@@ -172,7 +172,7 @@ def menu_estudantes(manager: EstudanteCRUD):
 def menu_usuarios(manager: UsuarioCRUD):
     while True:
         print("\n" + "="*35)
-        print("👤 GERENCIAR USUÁRIOS DO SISTEMA")
+        print("GERENCIAR USUÁRIOS DO SISTEMA")
         print("="*35)
         print("1. Criar novo Usuário")
         print("2. Buscar Usuário por CPF")
@@ -197,9 +197,9 @@ def menu_usuarios(manager: UsuarioCRUD):
             cpf = int(input("Digite o CPF para busca: "))
             usr = manager.ler_um({"cpf": cpf})
             if usr:
-                print(f"\n✅ Usuário Encontrado: {usr.get('nome')} | Login: {usr.get('login')} | CPF: {usr.get('cpf')}")
+                print(f"\nUsuário Encontrado: {usr.get('nome')} | Login: {usr.get('login')} | CPF: {usr.get('cpf')}")
             else:
-                print("⚠️ Usuário não encontrado.")
+                print("Usuário não encontrado.")
 
         elif opcao == '3':
             cpf = int(input("Digite o CPF do usuário a alterar: "))
@@ -214,7 +214,7 @@ def menu_usuarios(manager: UsuarioCRUD):
             if dados_novos:
                 manager.atualizar({"cpf": cpf}, dados_novos)
             else:
-                print("⚠️ Nenhuma alteração informada.")
+                print("Nenhuma alteração informada.")
 
         elif opcao == '4':
             cpf = int(input("Digite o CPF do usuário para remover: "))
@@ -223,7 +223,7 @@ def menu_usuarios(manager: UsuarioCRUD):
         elif opcao == '0':
             break
         else:
-            print("❌ Opção inválida.")
+            print("Opção inválida.")
 
 
 # ========================================================
@@ -232,7 +232,7 @@ def menu_usuarios(manager: UsuarioCRUD):
 def menu_cursos(manager: CursoCRUD):
     while True:
         print("\n" + "="*35)
-        print("📚 GERENCIAR CURSOS DA UNIVERSIDADE")
+        print("GERENCIAR CURSOS DA UNIVERSIDADE")
         print("="*35)
         print("1. Criar novo Curso")
         print("2. Buscar Curso por ID")
@@ -257,9 +257,9 @@ def menu_cursos(manager: CursoCRUD):
             id_curso = int(input("Digite o ID do Curso para busca: "))
             cur = manager.ler_um({"idCurso": id_curso})
             if cur:
-                print(f"\n✅ Curso Encontrado: {cur.get('nome')} | Turno: {cur.get('turno')} | ID: {cur.get('idCurso')}")
+                print(f"\nCurso Encontrado: {cur.get('nome')} | Turno: {cur.get('turno')} | ID: {cur.get('idCurso')}")
             else:
-                print("⚠️ Curso não encontrado.")
+                print("Curso não encontrado.")
 
         elif opcao == '3':
             id_curso = int(input("ID do curso a alterar: "))
@@ -274,7 +274,7 @@ def menu_cursos(manager: CursoCRUD):
             if dados_novos:
                 manager.atualizar({"idCurso": id_curso}, dados_novos)
             else:
-                print("⚠️ Nenhuma alteração informada.")
+                print("Nenhuma alteração informada.")
 
         elif opcao == '4':
             id_curso = int(input("ID do curso para deletar: "))
@@ -283,7 +283,7 @@ def menu_cursos(manager: CursoCRUD):
         elif opcao == '0':
             break
         else:
-            print("❌ Opção inválida.")
+            print("Opção inválida.")
 
 
 # ========================================================
@@ -307,7 +307,7 @@ def main():
     # LOOP PRINCIPAL DO SISTEMA
     while True:
         print("\n" + "#"*35)
-        print("🏛️  SISTEMA UNIVERSITÁRIO NOSQL")
+        print("SISTEMA UNIVERSITÁRIO NOSQL")
         print("#"*35)
         print("1. Gerenciar Estudantes e Vínculos")
         print("2. Gerenciar Usuários")
@@ -326,7 +326,7 @@ def main():
             print("\nDesconectando do banco... Sistema encerrado com sucesso. Até logo!")
             break
         else:
-            print("❌ Opção inválida. Tente novamente.")
+            print("Opção inválida. Tente novamente.")
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,7 @@ def popular_banco_completo():
     client = MongoClient(string_conexao)
     db = client['universidade']
     
-    print("⏳ Limpando banco de dados para evitar duplicidade...")
+    print("Limpando banco de dados para evitar duplicidade...")
     colecoes = ['departamento', 'usuario', 'professor', 'curso', 'estudante', 'disciplina', 'turma', 'projeto', 'plano', 'semestre']
     for col in colecoes:
         db[col].delete_many({})
@@ -223,7 +223,7 @@ def popular_banco_completo():
     # ========================================================
     # LOAD (CARGA DOS DADOS NO MONGODB)
     # ========================================================
-    print("📦 Inserindo dados mapeados...")
+    print("Inserindo dados mapeados...")
     
     if departamentos: db['departamento'].insert_many(departamentos)
     if usuarios: db['usuario'].insert_many(usuarios)
@@ -236,7 +236,7 @@ def popular_banco_completo():
     if turmas: db['turma'].insert_many(turmas)
     if estudantes: db['estudante'].insert_many(list(estudantes_map.values()))
 
-    print("🚀 BASE DE DADOS POVOADA E TRADUZIDA COM SUCESSO!")
+    print("BASE DE DADOS POVOADA E TRADUZIDA COM SUCESSO!")
     client.close()
 
 if __name__ == "__main__":
