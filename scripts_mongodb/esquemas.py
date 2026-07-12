@@ -154,12 +154,14 @@ esquema_turma = {
             "numero": {"bsonType": "int"},
             "ano": {"bsonType": "int"},
             "semestre": {"bsonType": "int"},
-            
+
+            # Tabela Embutida (LECIONA) 
             "professores_ministrantes": {
                 "bsonType": "array",
                 "items": {"bsonType": "string", "maxLength": 7}
             },
-            
+
+            # Tabelas Embutidas (ALOCACAO, HORARIO e SALA)
             "alocacoes_agenda": {
                 "bsonType": "array",
                 "items": {
