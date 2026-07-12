@@ -72,6 +72,8 @@ def menu_estudantes(manager: EstudanteCRUD):
         print("6. [Vínculo] Adicionar Curso ao Aluno")
         print("7. [Vínculo] Alterar Status do Curso")
         print("8. [Vínculo] Remover Curso do Aluno")
+        print("9. Listar Todos os Estudantes")
+        print("10. [Vínculo] Listar Todos os Vínculos do Sistema")
         print("0. Voltar ao Menu Principal")
         
         opcao = input("\nEscolha uma opção: ")
@@ -165,6 +167,42 @@ def menu_estudantes(manager: EstudanteCRUD):
             id_curso = int(input("ID do Curso para desvincular: "))
             manager.remover_vinculo(mat, id_curso)
 
+        elif opcao == '9':
+            print("\n" + "=" * 40)
+            print("LISTA DE TODOS OS ESTUDANTES")
+            print("=" * 40)
+            lista_estudantes = manager.ler_varios()
+
+            if lista_estudantes:
+                for est in lista_estudantes:
+                    qtd_vinculos = len(est.get('vinculos', []))
+                    print(
+                        f"Matrícula: {est.get('matEstudante')} | CPF: {str(est.get('cpf')).zfill(11)} | MC: {est.get('mc')} | Vínculos: {qtd_vinculos}")
+            else:
+                print("Nenhum estudante cadastrado no momento.")
+
+        elif opcao == '10':
+            print("\n" + "=" * 45)
+            print("TODOS OS VÍNCULOS ACADÊMICOS DO SISTEMA")
+            print("=" * 45)
+
+            lista_estudantes = manager.ler_varios()
+            encontrou_vinculo = False
+
+            if lista_estudantes:
+                for est in lista_estudantes:
+                    vinculos = est.get('vinculos', [])
+
+                    for v in vinculos:
+                        encontrou_vinculo = True
+                        matricula = est.get('matEstudante')
+                        id_curso = v.get('curso')
+                        status = v.get('status')
+                        print(f"Estudante: {matricula} | Curso ID: {id_curso} | Status: {status}")
+
+            if not encontrou_vinculo:
+                print("Nenhum vínculo encontrado no sistema no momento.")
+
         elif opcao == '0':
             break
         else:
@@ -183,6 +221,7 @@ def menu_usuarios(manager: UsuarioCRUD):
         print("2. Buscar Usuário por CPF")
         print("3. Atualizar Dados do Usuário")
         print("4. Deletar Usuário (Simula ON DELETE SET NULL)")
+        print("5. Listar Todos os Usuários")
         print("0. Voltar ao Menu Principal")
         
         opcao = input("\nEscolha uma opção: ")
@@ -225,6 +264,18 @@ def menu_usuarios(manager: UsuarioCRUD):
             cpf = int(input("Digite o CPF do usuário para remover: "))
             manager.deletar({"cpf": cpf})
 
+        elif opcao == '5':
+            print("\n" + "=" * 40)
+            print("LISTA DE TODOS OS USUÁRIOS")
+            print("=" * 40)
+            lista_usuarios = manager.ler_varios()
+
+            if lista_usuarios:
+                for usr in lista_usuarios:
+                    print(f"CPF: {str(usr.get('cpf')).zfill(11)} | Nome: {usr.get('nome')} | Login: {usr.get('login')}")
+            else:
+                print("Nenhum usuário cadastrado no momento.")
+
         elif opcao == '0':
             break
         else:
@@ -243,6 +294,7 @@ def menu_cursos(manager: CursoCRUD):
         print("2. Buscar Curso por ID")
         print("3. Atualizar Dados do Curso")
         print("4. Deletar Curso (Com trava de integridade)")
+        print("5. Listar Todos os Cursos")
         print("0. Voltar ao Menu Principal")
         
         opcao = input("\nEscolha uma opção: ")
@@ -284,6 +336,18 @@ def menu_cursos(manager: CursoCRUD):
         elif opcao == '4':
             id_curso = int(input("ID do curso para deletar: "))
             manager.deletar({"idCurso": id_curso})
+
+        elif opcao == '5':
+            print("\n" + "=" * 40)
+            print("LISTA DE TODOS OS CURSOS")
+            print("=" * 40)
+            lista_cursos = manager.ler_varios()
+
+            if lista_cursos:
+                for cur in lista_cursos:
+                    print(f"ID: {cur.get('idCurso')} | Curso: {cur.get('nome')} | Turno: {cur.get('turno')}")
+            else:
+                print("Nenhum curso cadastrado no momento.")
 
         elif opcao == '0':
             break
