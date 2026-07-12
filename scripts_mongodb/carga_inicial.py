@@ -1,10 +1,15 @@
 from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def popular_banco_completo():
-    # 1. CONEXÃO COM O MONGODB ATLAS
-    # Substitua pela sua string de conexão real
-
-    string_conexao = "mongodb+srv://Maard_db_user:mongo001@cluster-ufs.5fzp98n.mongodb.net/universidade?appName=Cluster-UFS"
+    # puxa a string de conexão
+    string_conexao = os.getenv("MONGO_URI")
+    if not string_conexao:
+        print("ERRO: Arquivo .env ou variável MONGO_URI não encontrados.")
+        return
 
     client = MongoClient(string_conexao)
     db = client['universidade']

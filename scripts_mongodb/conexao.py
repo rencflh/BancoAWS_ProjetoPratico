@@ -1,11 +1,18 @@
 from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
 
-# A sua Connection String com o usuário e a senha corretos
-uri = "mongodb+srv://Maard_db_user:mongo001@cluster-ufs.5fzp98n.mongodb.net/?appName=Cluster-UFS"
+# puxa a string de conexão usando o os.getenv
+# mudar o ip no codigo .env
+load_dotenv()
+uri = os.getenv("MONGO_URI")
 
 def testar_conexao():
     print("Tentando conectar com a AWS...")
     try:
+        # possível falha no arquivo .env
+        if not uri:
+            raise ValueError("A variável MONGO_URI não foi encontrada. Verifique o arquivo .env.")
         # Tenta estabelecer a conexão
         client = MongoClient(uri)
         

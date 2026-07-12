@@ -9,12 +9,17 @@ from scripts_mongodb.estudante_crud import EstudanteCRUD
 from scripts_mongodb.curso_crud import CursoCRUD
 from scripts_mongodb.usuario_crud import UsuarioCRUD
 
+import os
+from dotenv import load_dotenv
+
+# puxa a string de conexão usando o os.getenv
+load_dotenv()
+uri = os.getenv("MONGO_URI")
+
 def conectar_banco():
     """ Estabelece a conexão com o MongoDB Atlas """
-    string_conexao = "mongodb+srv://Maard_db_user:mongo001@cluster-ufs.5fzp98n.mongodb.net/universidade?appName=Cluster-UFS"
-    
     try:
-        client = MongoClient(string_conexao)
+        client = MongoClient(uri)
         db = client['universidade']
         client.admin.command('ping')
         return db
