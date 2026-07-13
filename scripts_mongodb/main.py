@@ -2,12 +2,12 @@ from pymongo import MongoClient
 from pymongo.errors import OperationFailure
 
 # Importa os esquemas de validação
-import scripts_mongodb.esquemas as esquemas
+import esquemas
 
 # Importa as classes de CRUD
-from scripts_mongodb.estudante_crud import EstudanteCRUD
-from scripts_mongodb.curso_crud import CursoCRUD
-from scripts_mongodb.usuario_crud import UsuarioCRUD
+from estudante_crud import EstudanteCRUD
+from curso_crud import CursoCRUD
+from usuario_crud import UsuarioCRUD
 
 import os
 from dotenv import load_dotenv
