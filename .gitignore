@@ -30,3 +30,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Arquivos de configuração da JetBrains (IntelliJ/PyCharm)
+*.iml
+.idea/
