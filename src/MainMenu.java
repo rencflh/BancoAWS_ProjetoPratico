@@ -148,7 +148,48 @@ public class MainMenu {
                     int idDel = scanner.nextInt();
                     cursoDAO.deletar(idDel);
                     break;
+                case 5:
+                    System.out.println("\n-- ATUALIZAR CURSO --");
+                    System.out.print("Digite o ID do Curso a ser atualizado: ");
+                    int idCursoUpdate = scanner.nextInt();
+                    scanner.nextLine(); // limpa o buffer
 
+                    // busca o registro atual
+                    Curso cursoAtual = cursoDAO.buscarPorId(idCursoUpdate);
+                    if (cursoAtual == null) {
+                        System.out.println("Curso não encontrado.");
+                        break; // sai do case e volta para o menu
+                    }
+
+                    System.out.println("Deixe em branco e aperte ENTER para manter o valor atual.");
+
+                    // lê o input e mescla com os valores antigos se estiver vazio o campo
+                    System.out.print("Novo Nome [" + cursoAtual.getNome() + "]: ");
+                    String inputNome = scanner.nextLine();
+                    String novoNomeCurso = inputNome.isEmpty() ? cursoAtual.getNome() : inputNome;
+
+                    System.out.print("Novo Grau [" + cursoAtual.getGrau() + "]: ");
+                    String inputGrau = scanner.nextLine();
+                    String novoGrau = inputGrau.isEmpty() ? cursoAtual.getGrau() : inputGrau;
+
+                    System.out.print("Novo Turno [" + cursoAtual.getTurno() + "]: ");
+                    String inputTurno = scanner.nextLine();
+                    String novoTurno = inputTurno.isEmpty() ? cursoAtual.getTurno() : inputTurno;
+
+                    System.out.print("Novo Campus [" + cursoAtual.getCampus() + "]: ");
+                    String inputCampus = scanner.nextLine();
+                    String novoCampus = inputCampus.isEmpty() ? cursoAtual.getCampus() : inputCampus;
+
+                    System.out.print("Novo Nível [" + cursoAtual.getNivel() + "]: ");
+                    String inputNivel = scanner.nextLine();
+                    String novoNivel = inputNivel.isEmpty() ? cursoAtual.getNivel() : inputNivel;
+
+                    // salva o objeto
+                    Curso cursoAtualizado = new Curso(novoNomeCurso, novoGrau, novoTurno, novoCampus, novoNivel);
+
+                    cursoDAO.atualizar(cursoAtualizado);
+                    System.out.println("Solicitação de atualização enviada!");
+                    break;
                 case 0:
                     System.out.println("Voltando...");
                     break;
@@ -238,6 +279,53 @@ public class MainMenu {
                     usuarioDAO.deletar(cpfDel);
                     break;
 
+                case 5:
+                    System.out.println("\n-- ATUALIZAR USUÁRIO --");
+                    System.out.print("Digite o CPF do Usuário a ser atualizado (somente números): ");
+                    long cpfUpdate = scanner.nextLong();
+                    scanner.nextLine(); // limpa o buffer
+
+                    // busca o usuário atual
+                    Usuario usuarioAtual = usuarioDAO.buscarPorCpf(cpfUpdate);
+                    if (usuarioAtual == null) {
+                        System.out.println("Usuário não encontrado.");
+                        break;
+                    }
+
+                    System.out.println("Deixe em branco e aperte ENTER para manter o valor atual.");
+
+                    // lê e mescla os dados
+                    System.out.print("Novo Nome [" + usuarioAtual.getNome() + "]: ");
+                    String inputNome = scanner.nextLine();
+                    String novoNome = inputNome.isEmpty() ? usuarioAtual.getNome() : inputNome;
+
+                    System.out.print("Nova Data de Nascimento (YYYY-MM-DD) [" + usuarioAtual.getDataNascimento() + "]: ");
+                    String inputDataNasc = scanner.nextLine();
+                    java.sql.Date novaDataNasc = inputDataNasc.isEmpty() ? usuarioAtual.getDataNascimento() : java.sql.Date.valueOf(inputDataNasc);
+
+                    String emailsAtuais = usuarioAtual.getEmails() != null ? String.join(",", usuarioAtual.getEmails()) : "";
+                    System.out.print("Novos Emails (separados por vírgula) [" + emailsAtuais + "]: ");
+                    String inputEmail = scanner.nextLine();
+                    String[] novosEmails = inputEmail.isEmpty() ? usuarioAtual.getEmails() : inputEmail.split(",");
+
+                    String telAtuais = usuarioAtual.getTelefones() != null ? String.join(",", usuarioAtual.getTelefones()) : "";
+                    System.out.print("Novos Telefones (separados por vírgula) [" + telAtuais + "]: ");
+                    String inputTel = scanner.nextLine();
+                    String[] novosTelefones = inputTel.isEmpty() ? usuarioAtual.getTelefones() : inputTel.split(",");
+
+                    System.out.print("Novo Login [" + usuarioAtual.getLogin() + "]: ");
+                    String inputLogin = scanner.nextLine();
+                    String novoLogin = inputLogin.isEmpty() ? usuarioAtual.getLogin() : inputLogin;
+
+                    System.out.print("Nova Senha [" + usuarioAtual.getSenha() + "]: ");
+                    String inputSenha = scanner.nextLine();
+                    String novaSenha = inputSenha.isEmpty() ? usuarioAtual.getSenha() : inputSenha;
+
+                    // salva
+                    Usuario usuarioAtualizado = new Usuario(cpfUpdate, novoNome, novaDataNasc, novosEmails, novosTelefones, novoLogin, novaSenha);
+                    usuarioDAO.atualizar(usuarioAtualizado);
+                    System.out.println("Solicitação de atualização enviada!");
+                    break;
                 case 0:
                     System.out.println("Voltando...");
                     break;
@@ -314,6 +402,32 @@ public class MainMenu {
                     System.out.print("Digite a Matrícula a ser deletada: ");
                     String matDel = scanner.nextLine();
                     estudanteDAO.deletar(matDel);
+                    break;
+                case 5:
+                    System.out.println("\n-- ATUALIZAR ESTUDANTE --");
+                    System.out.print("Digite a Matrícula do Estudante a ser atualizado: ");
+                    String matUpdate = scanner.nextLine();
+
+                    // busca o estudante atual
+                    Estudante estudanteAtual = estudanteDAO.buscarPorMatricula(matUpdate);
+                    if (estudanteAtual == null) {
+                        System.out.println("Estudante não encontrado.");
+                        break;
+                    }
+
+                    System.out.println("CPF, Matrícula e Ano de Ingresso são dados imutáveis.");
+                    System.out.println("Deixe em branco e aperte ENTER para manter o valor atual.");
+
+                    // lê apenas o que faz sentido mudar (MC)
+                    System.out.print("Novo MC [" + estudanteAtual.getMc() + "]: ");
+                    String inputMc = scanner.nextLine();
+                    double novoMc = inputMc.isEmpty() ? estudanteAtual.getMc() : Double.parseDouble(inputMc.replace(",", "."));
+
+                    // monta o novo objeto
+                    Estudante estudanteAtualizado = new Estudante(matUpdate, estudanteAtual.getCpf(), novoMc, estudanteAtual.getAnoIngresso());
+
+                    estudanteDAO.atualizar(estudanteAtualizado);
+                    System.out.println("Solicitação de atualização enviada!");
                     break;
 
                 case 0:
@@ -397,7 +511,44 @@ public class MainMenu {
                     int idDel = scanner.nextInt();
                     vinculoDAO.deletar(idDel);
                     break;
+                case 5:
+                    System.out.println("\n-- ATUALIZAR VÍNCULO --");
+                    System.out.print("Digite o ID do Vínculo a ser atualizado: ");
+                    int idVinculoUpdate = scanner.nextInt();
+                    scanner.nextLine(); // limpa o buffer
 
+                    // busca o vínculo atual
+                    Vinculo vinculoAtual = vinculoDAO.buscarPorId(idVinculoUpdate);
+                    if (vinculoAtual == null) {
+                        System.out.println("Vínculo não encontrado.");
+                        break;
+                    }
+
+                    System.out.println("Estudante, Curso e Data de Entrada são imutáveis no vínculo atual.");
+                    System.out.println("Deixe em branco e aperte ENTER para manter o valor atual.");
+
+                    // lê apenas o que faz sentido mudar (status e data de saída)
+                    System.out.print("Novo Status [" + vinculoAtual.getStatus() + "]: ");
+                    String inputStatus = scanner.nextLine();
+                    String novoStatus = inputStatus.isEmpty() ? vinculoAtual.getStatus() : inputStatus;
+
+                    String dataSaidaTexto = vinculoAtual.getDataSaida() != null ? vinculoAtual.getDataSaida().toString() : "Nenhuma";
+                    System.out.print("Nova Data de Saída (YYYY-MM-DD) [" + dataSaidaTexto + "]: ");
+                    String inputDataSaida = scanner.nextLine();
+                    java.sql.Date novaDataSaida = inputDataSaida.isEmpty() ? vinculoAtual.getDataSaida() : java.sql.Date.valueOf(inputDataSaida);
+
+                    // monta o novo objeto mantendo matrícula, curso e entrada com os valores originais
+                    Vinculo vinculoAtualizado = new Vinculo(
+                            vinculoAtual.getMatEstudante(),
+                            vinculoAtual.getIdCurso(),
+                            vinculoAtual.getDataEntrada(),
+                            novoStatus,
+                            novaDataSaida
+                    );
+
+                    vinculoDAO.atualizar(vinculoAtualizado);
+                    System.out.println("Solicitação de atualização de histórico enviada!");
+                    break;
                 case 0:
                     System.out.println("Voltando...");
                     break;
